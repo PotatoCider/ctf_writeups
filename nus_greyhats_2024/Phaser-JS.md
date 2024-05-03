@@ -20,10 +20,10 @@ After collecting all of the stars, the Wave counter increases by 1, and a fresh 
 `index.html`:
 ```html
 <head>
-	...
-	<script src="js/phaser.min.js"></script>
-	<script src="js/game.js"></script>
-	...
+    ...
+    <script src="js/phaser.min.js"></script>
+    <script src="js/game.js"></script>
+    ...
 </head>
 ```
 
@@ -46,19 +46,19 @@ Clicking "Yes", we a led to another [deobfuscator](https://obf-io.deobfuscate.io
 Unobfuscated code:
 ```js
 class xxxk extends Phaser.Scene {
-	...
-	["create"]() {
-		...
+    /* ... */
+    ["create"]() {
+        /* ... */
         this.score = 0;
         this.ggwave = 10000000;
         this.hihihaha = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 196, 180, 45, 13, 53, 112, 133, 142, 221, 121, 3, 157, 113, 81, 80, 195, 253, 225, 197, 202, 197, 48, 46, 21, 121, 40, 23, 239, 35, 175, 254, 103, 36, 126, 183, 218, 112, 235, 9, 98, 99, 29, 109, 196, 120, 43, 68, 126, 100, 81];
-        ...
-	}
-	...
-	["collectStar"](g, f) {
+        /* ... */
+    }
+    /* ... */
+    ["collectStar"](g, f) {
         f.disableBody(true, true);
         if (this.stars.countActive(true) === 0) {
-	        // [1]
+            // [1]
             this.score += 1;
             this.scoreText.setText("Wave: " + this.score);
             /* some unimportant code which respawns the bomb and stars */
@@ -71,7 +71,7 @@ class xxxk extends Phaser.Scene {
                 O = O * R % d;
             }
             for (let k = 0; k < 64; ++k) {
-	            // [2]
+                // [2]
                 this.hihihaha[this.hihihaha.length - 1 - k] = Number(O & 0xffn);
                 O = O >> 0x8n;
             }
@@ -82,7 +82,7 @@ class xxxk extends Phaser.Scene {
             }
             let j = this.score & 255;
             for (let m = 24; m < this.hihihaha.length; ++m) {
-	            // [2]
+                // [2]
                 this.hihihaha[m] ^= j;
                 j = this.hihihaha[m];
             }
@@ -135,46 +135,46 @@ const d = V * u;
 let last = Date.now()
 
 while (true) {
-	score += 1;
-	let R = hihihaha.reduce((S, k) => (S << 0x8n) + BigInt(k), 0x0n);
-	// removed constants and game object related code
+    score += 1;
+    let R = hihihaha.reduce((S, k) => (S << 0x8n) + BigInt(k), 0x0n);
+    // removed constants and game object related code
 
-	// [4]
-	let O = 0x1n;
-	for (let S = 0; S < 65537; S++) {
-		O = O * R % d;
-	}
-	for (let k = 0; k < 64; ++k) {
-		hihihaha[hihihaha.length - 1 - k] = Number(O & 0xffn);
-		O = O >> 0x8n;
-	}
-	for (let G = hihihaha.length - 1; G >= 24; G--) {
-		let h = G * score % 40 + 24;
-		[hihihaha[G], hihihaha[h]] = [hihihaha[h], hihihaha[G]];
-	}
-	let j = score & 255;
-	for (let m = 24; m < hihihaha.length; ++m) {
-		hihihaha[m] ^= j;
-		j = hihihaha[m];
-	}
+    // [4]
+    let O = 0x1n;
+    for (let S = 0; S < 65537; S++) {
+        O = O * R % d;
+    }
+    for (let k = 0; k < 64; ++k) {
+        hihihaha[hihihaha.length - 1 - k] = Number(O & 0xffn);
+        O = O >> 0x8n;
+    }
+    for (let G = hihihaha.length - 1; G >= 24; G--) {
+        let h = G * score % 40 + 24;
+        [hihihaha[G], hihihaha[h]] = [hihihaha[h], hihihaha[G]];
+    }
+    let j = score & 255;
+    for (let m = 24; m < hihihaha.length; ++m) {
+        hihihaha[m] ^= j;
+        j = hihihaha[m];
+    }
 
-	// added to measure the time taken to reach 10 million score
+    // added to measure the time taken to reach 10 million score
     if (score % 100 == 0) {
         let now = Date.now()
         console.log(score, now - last)
         last = now
     }
     
-	if (score == 10000000) {
-		let b = hihihaha.map(X => String.fromCharCode(X)).join('');
-		// print first 16 ASCII chars of hihihaha 
-		console.log(b.slice(16));
-		break; // exit forever loop
-	}
+    if (score == 10000000) {
+        let b = hihihaha.map(X => String.fromCharCode(X)).join('');
+        // print first 16 ASCII chars of hihihaha 
+        console.log(b.slice(16));
+        break; // exit forever loop
+    }
 }
 ```
 
-Let's try to run it in `node` and see what happens.
+Let's try to run it in [`node`](https://nodejs.org/en) and see what happens.
 
 ```bash
 ❯ node solve.js 
@@ -187,7 +187,7 @@ Let's try to run it in `node` and see what happens.
 ^C
 ```
 
-Let's see, it takes around 2.4 seconds to complete 100 iterations... which means it will take 66.7 hours to complete... ah that's not enough time before the CTF ends! Turns out our powerful computers can't manage this. Let's attempt to optimise it.
+Let's see, it takes around ~2.4 seconds to complete 100 iterations... which means it will take 66.7 hours to complete... ah that's not enough time before the CTF ends! Turns out our powerful computers can't manage this. Let's attempt to optimise it.
 
 Looking at the code, we see 1 `reduce` method call on `hihihaha` and 4 `for` loops. If we take a look at the number of iterations of each loop, we find that the first `for` loop [4] with 65537 iterations, is significantly larger than the rest of loops with lesser than 65 iterations. Let's try optimising this block of code.
 
@@ -204,7 +204,7 @@ for (let S = 0; S < 65537; S++) {
 
 We find that the `for` loop calculates `R` multiplied by itself `65537` times (mod `d`)... which is simply `R ^ 65537 (mod d)`. Is there a way to speed up repeated multiplication? 
 
-There is a way if you treat it as a *divide and conquer* problem. `x^16`, instead of multiplying `x` by itself 16 times, we can store the *intermediate* results like `x^2`, and multiply those instead.
+There is a way if you treat it as a [*divide and conquer*](https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm) problem. `x^16`, instead of multiplying `x` by itself 16 times, we can store the *intermediate* results like `x^2`, and multiply those instead.
 
 ```js
 x2 = x^2
@@ -225,34 +225,34 @@ x2 = x^2
 
 With [this method](https://en.wikipedia.org/wiki/Exponentiation_by_squaring), we turned exponentiation of the form `x^n` from `O(n)` problem to `O(log n)` problem. This also works under modulo arithmetic.
 
-Turning this idea into a recursive function, we get:
+With inspiration from a [stack overflow post](https://stackoverflow.com/questions/5989429/pow-and-mod-function-optimization), we can turn this idea into a recursive function:
 ```js
 // note that we have to use suffix `n` to denote that it is a BigInt literal.
 // https://stackoverflow.com/questions/5989429/pow-and-mod-function-optimization
 function expmod(base, exp, mod) {
     if (exp == 0n) return 1n;
     if (exp % 2n == 0n) {
-	    // if even, calculate base ^ (exp / 2) first, then square it.
+        // if even, calculate base ^ (exp / 2) first, then square it.
         return (expmod(base, (exp / 2n), mod) ** 2n) % mod;
     } else {
-	    // if odd, calculate base ^ (exp - 1) and multiply it by base once. 
+        // if odd, calculate base ^ (exp - 1) and multiply it by base once. 
         return (base * expmod(base, (exp - 1n), mod)) % mod;
     }
 }
 /* ... */
 while (true) {
-	/* ... */
-	// [4]
-	// let O = 0x1n;
-	// for (let S = 0; S < 65537; S++) {
-	// 	O = O * R % d;
-	// }
-	let O = expmod(R, 65537n, d);
-	/* ... */
-	
-	// we can now print every 10000 iterations because it is blazingly fast now
-	if (score % 10000 == 0) {
-	/* ... */
+    /* ... */
+    // [4]
+    // let O = 0x1n;
+    // for (let S = 0; S < 65537; S++) {
+    // 	O = O * R % d;
+    // }
+    let O = expmod(R, 65537n, d);
+    /* ... */
+    
+    // we can now print every 10000 iterations because it is blazingly fast now
+    if (score % 10000 == 0) {
+    /* ... */
 }
 ```
 
@@ -284,14 +284,17 @@ Yay, we got the flag: `grey{ea_sports_its_in_the_game_586256cbd58140ec}`
 ---
 ## Final Code
 ```js
+// note that we have to use suffix `n` to denote that it is a BigInt literal.
+// https://stackoverflow.com/questions/5989429/pow-and-mod-function-optimization
 function expmod(base, exp, mod) {
-	if (exp == 0n) return 1n;
-	if (exp % 2n == 0n) {
-		return (expmod(base, (exp / 2n), mod) ** 2n) % mod;
-	}
-	else {
-		return (base * expmod(base, (exp - 1n), mod)) % mod;
-	}
+    if (exp == 0n) return 1n;
+    if (exp % 2n == 0n) {
+        // if even, calculate base ^ (exp / 2) first, then square it.
+        return (expmod(base, (exp / 2n), mod) ** 2n) % mod;
+    } else {
+        // if odd, calculate base ^ (exp - 1) and multiply it by base once. 
+        return (base * expmod(base, (exp - 1n), mod)) % mod;
+    }
 }
 
 // this.<member> variables
@@ -307,42 +310,42 @@ const d = V * u;
 let last = Date.now()
 
 while (true) {
-	score += 1;
-	let R = hihihaha.reduce((S, k) => (S << 0x8n) + BigInt(k), 0x0n);
-	// removed constants and game object related code
+    score += 1;
+    let R = hihihaha.reduce((S, k) => (S << 0x8n) + BigInt(k), 0x0n);
+    // removed constants and game object related code
 
-	// let O = 0x1n;
-	// for (let S = 0; S < 65537; S++) {
-	// 	O = O * R % d;
-	// }
-	let O = expmod(R, 65537n, d);
-	for (let k = 0; k < 64; ++k) {
-		hihihaha[hihihaha.length - 1 - k] = Number(O & 0xffn);
-		O = O >> 0x8n;
-	}
-	for (let G = hihihaha.length - 1; G >= 24; G--) {
-		let h = G * score % 40 + 24;
-		[hihihaha[G], hihihaha[h]] = [hihihaha[h], hihihaha[G]];
-	}
-	let j = score & 255;
-	for (let m = 24; m < hihihaha.length; ++m) {
-		hihihaha[m] ^= j;
-		j = hihihaha[m];
-	}
+    // [4]
+    // let O = 0x1n;
+    // for (let S = 0; S < 65537; S++) {
+    // 	O = O * R % d;
+    // }
+    let O = expmod(R, 65537n, d);
+    for (let k = 0; k < 64; ++k) {
+        hihihaha[hihihaha.length - 1 - k] = Number(O & 0xffn);
+        O = O >> 0x8n;
+    }
+    for (let G = hihihaha.length - 1; G >= 24; G--) {
+        let h = G * score % 40 + 24;
+        [hihihaha[G], hihihaha[h]] = [hihihaha[h], hihihaha[G]];
+    }
+    let j = score & 255;
+    for (let m = 24; m < hihihaha.length; ++m) {
+        hihihaha[m] ^= j;
+        j = hihihaha[m];
+    }
 
-	// added to measure the time taken to reach 10 million score
-	if (score % 10000 == 0) {
-		let now = Date.now()
-		console.log(score, now - last)
-		last = now
-	}
+    // added to measure the time taken to reach 10 million score
+    if (score % 10000 == 0) {
+        let now = Date.now()
+        console.log(score, now - last)
+        last = now
+    }
 
-	if (score == 10000000) {
-		let b = hihihaha.map(X => String.fromCharCode(X)).join('');
-		// print first 16 ASCII chars of hihihaha 
-		console.log(b.slice(16));
-		break; // exit forever loop
-	}
+    if (score == 10000000) {
+        let b = hihihaha.map(X => String.fromCharCode(X)).join('');
+        // print first 16 ASCII chars of hihihaha 
+        console.log(b.slice(16));
+        break; // exit forever loop
+    }
 }
-
 ```

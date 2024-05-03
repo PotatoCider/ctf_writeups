@@ -41,17 +41,17 @@ The entrypoint `/run.sh` simply calls `/run.py`. Well, that's unnecessary. Let's
 # Receive Verilog code until 'END'
 enc_input = input("base64 encoded input: ")
 try:
-	received_data = base64.b64decode(enc_input).decode()
+    received_data = base64.b64decode(enc_input).decode()
 ```
 Taking a look at `/run.py`, we see the entrypoint `main` function. It takes in user input, and decodes it into `received_data`. The comment above probably implies that we're supposed to provide base64 encoded Verilog code.
 
 ```python
 BAD_WORDS = ['if', 'else', '?', '+']
-...
+# ...
 for word in BAD_WORDS:
-	if word in received_data:
-		print("Bad Words Detected")
-		sys.exit(0)
+    if word in received_data:
+        print("Bad Words Detected")
+        sys.exit(0)
 ```
 We are then met with a for loop filtering out `BAD_WORDS` from the user provided Verilog code. This means we **cannot use `if`, `else`, `?` or `+` in our code**. Keep that in mind.
 
@@ -62,7 +62,7 @@ output = run_verilog_code(received_data)
 # Check if output matches expected
 expected_output_file = 'expected_output.txt'
 if check_output(output, expected_output_file):
-	print(f"Congratulations! Flag: {FLAG}")
+    print(f"Congratulations! Flag: {FLAG}")
 ```
 The Verilog code is run and the output is matched against `expected_output.txt` in our challenge directory. This means that if the output of our provided Verilog code is identical to `expected_output.txt`, we get our `flag`.
 
@@ -85,19 +85,19 @@ clk 0, result          4
 
 ```python
 def copy_and_run(verilog_code, directory_path='test'):
-	...
-	# Change the current working directory to the temporary directory
-	os.chdir(os.path.join(temp_dir, directory_path))
-	
-	with open("solve.v", mode='w+') as f:
-		f.write(verilog_code)
-	
-	# Run the shell script
-	os.system('iverilog -o ./vt -s test -c file_list.txt')
-	os.system('(vvp ./vt > output.txt )')
-	
-	with open('output.txt', 'r') as file:
-		output = file.read().strip()
+    # ...
+    # Change the current working directory to the temporary directory
+    os.chdir(os.path.join(temp_dir, directory_path))
+    
+    with open("solve.v", mode='w+') as f:
+        f.write(verilog_code)
+    
+    # Run the shell script
+    os.system('iverilog -o ./vt -s test -c file_list.txt')
+    os.system('(vvp ./vt > output.txt )')
+    
+    with open('output.txt', 'r') as file:
+        output = file.read().strip()
 ```
 Reading the `run_verilog_code` function, we find that **it writes our user input into `solve.v` in the `test/` directory**, and runs `iverilog` and `vvp` on it. Keep this in mind.  ^e8d542
 
@@ -199,13 +199,13 @@ Removing `reset`, changing `out` to `result`, and merging the duplicate `out` an
 `solve.v`:
 ```verilog
 module counter(clk, result);
-	parameter WIDTH = 32;
-	output reg [WIDTH-1: 0] result;
-	input wire clk;
-	
-	always @(posedge clk) begin
-		result <= result + 1;
-	end
+    parameter WIDTH = 32;
+    output reg [WIDTH-1: 0] result;
+    input wire clk;
+    
+    always @(posedge clk) begin
+        result <= result + 1;
+    end
 endmodule // counter
 ```
 
@@ -252,17 +252,17 @@ Going back to [Google (our best friend)](https://www.lmgt.com/?q=x+in+verilog), 
 `solve.v`:
 ```verilog
 module counter(clk, result);
-	parameter WIDTH = 32;
-	output reg [WIDTH-1: 0] result;
-	input wire clk;
+    parameter WIDTH = 32;
+    output reg [WIDTH-1: 0] result;
+    input wire clk;
 
-	// constructor
-	initial begin
-		result <= 0;
-	end
-	always @(posedge clk) begin
-		result <= result + 1;
-	end
+    // constructor
+    initial begin
+        result <= 0;
+    end
+    always @(posedge clk) begin
+        result <= result + 1;
+    end
 endmodule // counter
 ```
 
@@ -284,17 +284,17 @@ Oh. We forgot to omit `+` in our code as it is one of the bad words. Another way
 ``
 ```verilog
 module counter(clk, result);
-	parameter WIDTH = 32;
-	output reg [WIDTH-1: 0] result;
-	input wire clk;
+    parameter WIDTH = 32;
+    output reg [WIDTH-1: 0] result;
+    input wire clk;
 
-	// constructor
-	initial begin
-		result <= 0;
-	end
-	always @(posedge clk) begin
-		result <= result - (-1); // no "+" allowed
-	end
+    // constructor
+    initial begin
+        result <= 0;
+    end
+    always @(posedge clk) begin
+        result <= result - (-1); // no "+" allowed
+    end
 endmodule // counter
 ```
 
