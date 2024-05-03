@@ -1,10 +1,8 @@
-# Verilog Count
+# Verilog Count (Misc, 559 pts, 36 solves)
 
-### Points: 559
+### Author: `Hackin7`
 ### Description:
 I want to count from 0
-
-Author: `Hackin7`
 
 `nc challs.nusgreyhats.org 31114`
 
@@ -271,7 +269,7 @@ base64 encoded input: bW9kdWxlIGNvdW50ZXIoY2xrLCByZXN1bHQpOwoJcGFyYW1ldGVyIFdJRF
 Bad Words Detected
 ```
 
-Oh. We forgot to remove `+` in our code, another way to represent `+x` is `-(-x)`, let's give that a shot.
+Oh. We forgot to omit `+` in our code as it is one of the bad words. Another way to represent `+x` is `-(-x)`, let's give that a shot.
 ``
 ```verilog
 module counter(clk, result);
