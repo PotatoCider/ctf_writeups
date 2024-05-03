@@ -6,7 +6,9 @@ I want to count from 0
 
 `nc challs.nusgreyhats.org 31114`
 
+---
 ## Intro
+
 First of all, what is Verilog? Well, I heard some hardware engineers use it so it must be hardware related. A quick Google search tells me that it is a *hardware description language* (HDL) used to *model electronic systems*. Ah, so it must simulate circuits, but we don't have much time to learn it from scratch. Let's jump into the challenge.
 
 ```bash
@@ -31,7 +33,9 @@ python3 /run.py
 ```
 The entrypoint `/run.sh` simply calls `/run.py`. Well, that's unnecessary. Let's follow the execution path.
 
+---
 ## The Server Code
+
 `/run.py`:
 ```python
 # Receive Verilog code until 'END'
@@ -101,7 +105,9 @@ The standard output of the 2nd command is fed into `output.txt`, which gets read
 
 What does `iverilog` and `vvp` do? Well, when I first saw the code, `iverilog` seemed to a compiler for the Verilog, but I wasn't sure what `vvp` does. A quick Google Search shows that `iverilog`  is indeed the compiler and `vvp` is the *simulation run-time engine*. Ah that makes sense, since the CPU doesn't really simulate hardware, so we have to have a interpreter-like program to simulate the hardware based on the Verilog code. 
 
+---
 ## Verilog Intro
+
 Taking a look at the `test/` directory we find 3 files.
 ```bash
 $ ls
@@ -164,7 +170,9 @@ We can safely assume that `counter c` isn't some sort of primitive type given th
 
 However, we don't see `counter` defined in this file. Hence, **the user must provide it**! So the real challenge begins.
 
+---
 ## Inspiration
+
 In the [fandom wiki](https://iverilog.fandom.com/wiki/Getting_Started), they provide a code snippet for `counter`, so we can ~~copy-paste~~ take inspiration from there. (While doing the CTF, I completely missed this code snippet, so I basically built the solution below from scratch)
 
 Code Snippet:
@@ -202,7 +210,10 @@ endmodule // counter
 ```
 
 Next, we can try to run this code in the docker container.
+
+---
 ## Running locally
+
 We can build and run the docker file to test the code out.
 ```
 ❯ docker build -t verilog_count .
@@ -295,7 +306,9 @@ Congratulations! Flag: grey{TEST_FLAG}
 root@988ec93cbe35:/# 
 ```
 
+---
 ## Flag
+
 We got the flag locally! Trying it remotely:
 
 ```bash

@@ -6,6 +6,7 @@ I followed the phaserjs tutorial and made it a lot harder. Clear 10000000 waves 
 
 http://challs.nusgreyhats.org:39876
 
+---
 ## Website
 Opening the website, we are met with a minigame where our (apparent) objective is to collect all of the stars while avoiding the bombs.
 
@@ -13,6 +14,7 @@ Opening the website, we are met with a minigame where our (apparent) objective i
 
 After collecting all of the stars, the Wave counter increases by 1, and a fresh batch of 12 stars and 10 bombs respawns into the arena. We can't possibly hit 10000000 waves by playing the game in a feasible amount of time. So let's check out the code.
 
+---
 ## Obfuscated JS
 
 `index.html`:
@@ -37,6 +39,8 @@ Opening `game.js`, we find that it is obfuscated. Let's try [searching Google](h
 ![obfuscation notice](assets/phaser_js_obfuscator_notice.png)
 
 Clicking "Yes", we a led to another [deobfuscator](https://obf-io.deobfuscate.io/), which successfully deobfuscates our javascript code.
+
+---
 ## Simulating `collectStar` method
 
 Unobfuscated code:
@@ -91,7 +95,6 @@ class xxxk extends Phaser.Scene {
     }
 }
 ```
-
 
 Searching for `console.log` in the source, we find one match in the `collect` method which is called every time a star is collected.
 
@@ -188,6 +191,7 @@ Let's see, it takes around 2.4 seconds to complete 100 iterations... which means
 
 Looking at the code, we see 1 `reduce` method call on `hihihaha` and 4 `for` loops. If we take a look at the number of iterations of each loop, we find that the first `for` loop [4] with 65537 iterations, is significantly larger than the rest of loops with lesser than 65 iterations. Let's try optimising this block of code.
 
+---
 ## Optimising Repeated Multiplication
 
 ```js
@@ -248,6 +252,7 @@ while (true) {
 }
 ```
 
+---
 ## Running the Optimised Simulation
 
 Running the code, we find that the code takes 120ms to complete 10000 waves, which means our script would only take 120 seconds to complete!
@@ -272,6 +277,7 @@ grey{ea_sports_its_in_the_game_586256cbd58140ec}
 
 Yay, we got the flag: `grey{ea_sports_its_in_the_game_586256cbd58140ec}`
 
+---
 ## Final Code
 ```js
 function expmod(base, exp, mod) {
