@@ -8,7 +8,8 @@ http://challs.nusgreyhats.org:39876
 
 ## Website
 Opening the website, we are met with a minigame where our (apparent) objective is to collect all of the stars while avoiding the bombs.
-![[phaser_js_game_ss.png]]
+
+![phaser js game screenshot](assets/phaser_js_game_ss.png)
 
 After collecting all of the stars, the Wave counter increases by 1, and a fresh batch of 12 stars and 10 bombs respawns into the arena. We can't possibly hit 10000000 waves by playing the game in a feasible amount of time. So let's check out the code.
 
@@ -32,7 +33,8 @@ Looking at `index.html`, we see `js/game.js` is loaded along with [Phaser JS fra
 ```
 
 Opening `game.js`, we find that it is obfuscated. Let's try [searching Google](https://www.lmgt.com/?q=javascript+deobfuscator) for some deobsfucators. Trying to obfuscate the code using [first link](https://deobfuscate.io/), we a met with a message box asking us to goto another website.
-![[phaser_js_obfuscator_notice.png]]
+
+![obfuscation notice](assets/phaser_js_obfuscator_notice.png)
 
 Clicking "Yes", we a led to another [deobfuscator](https://obf-io.deobfuscate.io/), which successfully deobfuscates our javascript code.
 ## Simulating `collectStar` method
@@ -94,12 +96,12 @@ class xxxk extends Phaser.Scene {
 Searching for `console.log` in the source, we find one match in the `collect` method which is called every time a star is collected.
 
 By taking a look at the member variables referenced (`this.<variable>`) in this method, we find that 6 member variables are referenced:
-	- `this.score` - The score
-	- `this.ggwave` - After completing this wave, `console.log` is called (which presumably contains the flag)
-	- [`this.hihihaha`](https://www.youtube.com/watch?v=ZRF2071HZRU) (64 byte array)
-	- `this.stars` (star game objects)
-	- `this.bombs` (bomb game objects)
-	- `this.scoreText` (score text game object?)
+- `this.score` - The score
+- `this.ggwave` - After completing this wave, `console.log` is called (which presumably contains the flag)
+- [`this.hihihaha`](https://www.youtube.com/watch?v=ZRF2071HZRU) (64 byte array)
+- `this.stars` (star game objects)
+- `this.bombs` (bomb game objects)
+- `this.scoreText` (score text game object?)
 
 If there are no more stars active (`this.stars.countActive(true) === 0`), the code
  - increments `this.score` by 1 [1]
