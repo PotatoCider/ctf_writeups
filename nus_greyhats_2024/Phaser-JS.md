@@ -195,43 +195,47 @@ Looking at the code, we see 1 `reduce` method call on `hihihaha` and 4 `for` loo
 ## Optimising Repeated Multiplication
 
 ```js
+// [4]
+let O = 0x1n;
 for (let S = 0; S < 65537; S++) {
 	O = O * R % d;
 }
 ```
 
-We find that it is multiply `O` by `R` (mod `d`) 65537 times... which is just exponentiation under modulo arithmetic. Is there a way to speed up repeated multiplication? 
+We find that the `for` loop calculates `R` multiplied by itself `65537` times (mod `d`)... which is simply `R ^ 65537 (mod d)`. Is there a way to speed up repeated multiplication? 
 
 There is a way if you treat it as a *divide and conquer* problem. `x^16`, instead of multiplying `x` by itself 16 times, we can store the *intermediate* results like `x^2`, and multiply those instead.
 
 ```js
-x2 = x * x
-x4 = x2 * x2
-x8 = x4 * x4
-x16 = x8 * x8
-// notice that we only need 4 multiplications for x ** 16! 
+x2 = x^2
+x4 = x2^2
+x8 = x4^2
+x16 = x8^2
+// notice that we only need to compute the square 4 times for x^16! 
 ```
 
-There's a problem though, what happens if the exponent is not a power of 2? Well, we can just multiply by a single `x`.
+There's a problem though, what happens if the exponent is not a power of 2? Well, we can just multiply by a single `x` instead.
 
 ```js
-x12 = x6 * x6
-x6 = x3 * x3
-x3 = x2 * x
-x2 = x * x
+x12 = x6^2
+x6 = x3^2
+x3 = x2 * x // if its odd, we multiply by the base once instead of squaring
+x2 = x^2
 ```
 
-With [this method](https://en.wikipedia.org/wiki/Exponentiation_by_squaring), we turned exponentiation of the form `x^n` from `O(n)` problem to `O(log n)` problem.
+With [this method](https://en.wikipedia.org/wiki/Exponentiation_by_squaring), we turned exponentiation of the form `x^n` from `O(n)` problem to `O(log n)` problem. This also works under modulo arithmetic.
 
-Turning this idea into code, we get:
+Turning this idea into a recursive function, we get:
 ```js
 // note that we have to use suffix `n` to denote that it is a BigInt literal.
 // https://stackoverflow.com/questions/5989429/pow-and-mod-function-optimization
 function expmod(base, exp, mod) {
     if (exp == 0n) return 1n;
     if (exp % 2n == 0n) {
+	    // if even, calculate base ^ (exp / 2) first, then square it.
         return (expmod(base, (exp / 2n), mod) ** 2n) % mod;
     } else {
+	    // if odd, calculate base ^ (exp - 1) and multiply it by base once. 
         return (base * expmod(base, (exp - 1n), mod)) % mod;
     }
 }
