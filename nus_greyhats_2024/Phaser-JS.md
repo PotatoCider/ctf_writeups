@@ -110,14 +110,14 @@ If there are no more stars active (`this.stars.countActive(true) === 0`), the co
  - increments `this.score` by 1 [1]
  - updates `this.hihihaha` with some magic algorithm [2]
  - checks if `this.score` is at wave 10 million [3]
-	 - if the 10 millionth wave is reached, then print the first 16 bytes
+	 - if the 10 millionth wave is reached, then print first 16 ASCII chars of `this.hihihaha`
 
 Since we don't know what this magical algorithm that modifies `this.hihihaha` is, we can attempt to run the code within the `if` block 10 million times! After all, my computer can run billions of instructions per second right? 
 
 Isolating the code within the `collectStar` method by
 - converting the code to a infinite loop that breaks after 10 million waves
  - removing references to game objects (`this.stars`, `this.bombs`, `this.scoreText`)
- - refactoring constants (`V`, `u`, `d`)
+ - refactoring `this.<member>` variables and constants (`V`, `u`, `d`) into global variables
  - printing every `100` waves to track progress
 
 We get:
